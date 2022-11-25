@@ -19,10 +19,10 @@ class Client_Downloader:
             return False
         return True
     
-    def download_request(self, request_type: str, stock_list: list, frequency: str, start_time: str, end_time: str, columns: list):
+    def download_request(self, request_type: str = '', stock_list: list = [], frequency: str = '', start_time: str = '', end_time: str = '', columns: list = []):
         if (start_time and not self.validate_datetime(start_time)) or (end_time and not self.validate_datetime(end_time)):
             print('Wrong datetime format. Should be yyyy-mm-dd hh:mm')
-            return
+            return None, None
         
         data = {
             'username': self.username,
@@ -40,45 +40,69 @@ class Client_Downloader:
         response = json.loads(response.text)
         # error handling
         if response.get('code', 0) != 0:
-            print(response.get('msg', 'An error occurred.'))
-            return
+            print(response.get('msg', 'An unknown error occurred.'))
+            return None, None
         
-        returned_file_str = response.get('data', '')
-        if returned_file_str:
+        quota_str = response.get('quota', '')
+        if quota_str:
+            quota = int(quota_str)
+            print('quota remaining:', quota)
+        else:
+            quota = None
+            print('The server returns no quota info.')
+
+        returned_data_str = response.get('data', '')
+        if returned_data_str:
             # print(returned_file_str)
             if request_type == 'trade_day':
-                is_trade_day = bool(returned_file_str)
-                print(is_trade_day)
-                return is_trade_day
+                returned_data = bool(returned_data_str)
             elif request_type == 'trade_day_between':
-                trade_days = returned_file_str.split("|")
-                print(trade_days, type(trade_days))
-                return trade_days
+                returned_data = returned_data_str.split("|")
             elif request_type == 'latest_price':
-                latest_price = float(returned_file_str)
-                print(latest_price)
-                return latest_price
+                returned_data = float(returned_data_str)
             else:
-                dataframe_file = pd.read_json(returned_file_str, orient='table')
-                print(dataframe_file)
-                return dataframe_file
+                returned_data = pd.read_json(returned_data_str, orient='table')
         else:
+            returned_data = None
             print('The server returns no data.')
+        
+        return returned_data, quota
 
 if __name__ == '__main__':
     downloader = Client_Downloader('test_user', '123456')
-    # downloader.download_request('min_between', ['885779.TI'], '1', '1900-01-01 00:00', '1900-01-01 00:00', ['open', 'high', 'low', 'close', 'avgPrice', 'volume'])
-    df = downloader.download_request('min_between', ['885779.TI'], '1', '2022-11-24 10:14', '2022-11-24 10:15', ['open', 'high', 'low', 'close', 'avgPrice', 'volume'])
+    rd, quota = downloader.download_request(request_type='min_between', stock_list=['885779.TI'], frequency='1', start_time='1900-01-03 00:00', end_time='1900-01-02 00:00', columns=['open', 'high', 'low', 'close', 'avgPrice', 'volume'])
+    print(rd)
+    print(quota)
     print()
-    df = downloader.download_request('real_time', ['885779.TI'], '', '', '', ['open', 'high', 'low', 'close', 'avgPrice', 'volume'])
+    rd, quota = downloader.download_request(request_type='min_between', stock_list=['885779.TI'], frequency='1', start_time='2022-11-24 10:14', end_time='2022-11-24 10:15', columns=['open', 'high', 'low', 'close', 'avgPrice', 'volume'])
+    print(rd)
+    print(quota)
     print()
-    df = downloader.download_request('day_between', ['885779.TI'], '', '2022-11-21 10:00', '2022-11-24 00:00', ['open', 'high', 'low', 'close', 'avgPrice', 'volume'])
+    rd, quota = downloader.download_request(request_type='real_time', stock_list=['885779.TI'], columns=['open', 'high', 'low', 'close', 'avgPrice', 'volume'])
+    print(rd)
+    print(quota)
     print()
-    df = downloader.download_request('stock_name', ['885779.TI', '864005.TI'], '', '', '', [])
+    rd, quota = downloader.download_request(request_type='day_between', stock_list=['885779.TI'], start_time='2022-11-21 10:00', end_time='2022-11-24 00:00', columns=['open', 'high', 'low', 'close', 'avgPrice', 'volume'])
+    print(rd)
+    print(quota)
     print()
-    df = downloader.download_request('trade_day', [], '', '2022-11-24 10:14', '', [])
+    rd, quota = downloader.download_request(request_type='stock_name', stock_list=['885779.TI', '864005.TI'])
+    print(rd)
+    print(quota)
     print()
-    df = downloader.download_request('trade_day_between', [], '', '2022-11-21 10:14', '2022-11-24 10:15', [])
+    rd, quota = downloader.download_request(request_type='trade_day', start_time='2022-11-24 10:14')
+    print(rd)
+    print(quota)
     print()
-    df = downloader.download_request('latest_price', ['885779.TI'], '', '', '', [])
+    rd, quota = downloader.download_request(request_type='trade_day_between', start_time='2022-11-21 10:14', end_time='2022-11-24 10:15')
+    print(rd)
+    print(quota)
+    print()
+    rd, quota = downloader.download_request(request_type='latest_price', stock_list=['885779.TI'])
+    print(rd)
+    print(quota)
+    print()
+    rd, quota = downloader.download_request(request_type='check_quota')
+    print(rd)
+    print(quota)
     # df.to_csv("/home/wzhang/workspace/test2.csv")
