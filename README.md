@@ -7,9 +7,9 @@ pip install requests
 pip install pandas
 ```
 ### 2. Use the Downloader
-2.1. Copy client_downloader_api.py into your project folder
+2.1. Copy `client_downloader_api.py` into your project folder
 
-2.2. Import the "Client_Downloader" Class in your program
+2.2. Import the `Client_Downloader` Class in your program
 ```python
 # at the top of your program
 
@@ -24,34 +24,34 @@ from client_downloader_api import Client_Downloader
 
 downloader = Client_Downloader("your_username_str", "your_password_str")
 ```
-2.4. Use the downloader in your porgram (refer to the "Parameters" section)
+2.4. Use the downloader in your porgram (refer to the **Parameters** section)
 
 ## Parameters
 ### request_type (str)
 - `'min_between'`: get minute-level data between two time points (inclusive)
     + return a DataFrame formatted as below and your remaining quota:
-    ```
+    ```bash
     code        date_time            column_1  column_2  column_3  ...
     888888_EG   YYYY-mm-DD HH:MM:00   info_1    info_2    info_3   ...
     ...            ...                 ...       ...       ...     ...
     ```
 - `'real_time'`: get real-time data
     + return a DataFrame fromatted as below and your remaining quota:
-    ```
+    ```bash
                 date_time               column_1  column_2  column_3  ...
     888888_EG   YYYY-mm-DD HH:MM:SS:00   info_1    info_2    info_3   ...
     ...            ...                    ...       ...       ...     ...
     ```
 - `'day_between'`: get day-level data between two dates (inclusive)
     + return a DataFrame formatted as below and your remaining quota:
-    ```
+    ```bash
     code        date_time    column_1  column_2  column_3  ...
     888888_EG   YYYY-mm-DD    info_1    info_2    info_3   ...
     ...            ...         ...       ...       ...     ...
     ```
 - `'stock_name'`: find stock name of the code
     + return a DataFrame formatted as below and your remaining quota:
-    ```
+    ```bash
                 stock_name
     888888_EG   中文名称
     ```
@@ -59,7 +59,7 @@ downloader = Client_Downloader("your_username_str", "your_password_str")
     + return a boolean (True for trading day, False for non-trading day) and your remaining quota
 - `'trade_day_between'`: find all trading days between two dates (inclusive, for A-share only)
     + return a list formatted as below and your remaining quota:
-    ```
+    ```bash
     ['YYYY-mm-DD', 'YYYY-mm-DD', 'YYYY-mm-DD', ...]
     ```
 - `'latest_price'`: get the latest price of a stock
@@ -69,14 +69,14 @@ downloader = Client_Downloader("your_username_str", "your_password_str")
 
 ### stock_list (list[str])
 - a list of stock codes formatted as below:
-```
+```python
 # both '_' and '.' are supported
 
 ['888888_EG', '666666_EG', '233333_EG', ...]  # preferred
 or
 ['888888.EG', '666666.EG', '233333.EG', ...]
 ```
-- only needed when request_type is:
+- only needed when **request_type** is:
     + `'min_between'`
     + `'real_time'`
     + `'day_between'`
@@ -86,12 +86,12 @@ or
 ### frequency (str)
 - a string indicating the time interval between two adjacent lines in data
 - support `'1', '3', '5', '10', '15', '30', '60'`
-- only needed when request_type is:
+- only needed when **request_type** is:
     + `'min_between'`
 
 ### start_time (str)
 - a string of the start time with the format "YYYY-mm-DD HH:MM"
-- only needed when request_type is:
+- only needed when **request_type** is:
     + `'min_between'`
     + `'day_between'`
     + `'trade_day'` (serve as the queried date)
@@ -100,7 +100,7 @@ or
 
 ### end_time (str)
 - a string of the end time with the format "YYYY-mm-DD HH:MM"
-- only needed when request_type is:
+- only needed when **request_type** is:
     + `'min_between'`
     + `'day_between'`
     + `'trade_day_between'`
@@ -111,6 +111,10 @@ or
 ```python
 ['column_1', 'column_2', 'column_3', ...]
 ```
+- only needed when **request_type** is:
+    + `'min_between'`
+    + `'real_time'`
+    + `'day_between'`
 - supported queries are listed as below:
     * for stock (A-share):
         + `'open'`: 开盘价
