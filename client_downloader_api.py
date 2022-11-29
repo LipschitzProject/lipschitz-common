@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 from datetime import datetime
 
-SERVER_DOWNLOADER_URL = 'http://127.0.0.1:8002/download_request'  # change to deployment server ip
+SERVER_DOWNLOADER_URL = 'http://47.100.62.110:8002/download_request'  # change to deployment server ip
 
 headers = {'Content-Type': 'application/json'}
 
