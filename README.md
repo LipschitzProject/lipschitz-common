@@ -239,9 +239,15 @@ rd, quota = downloader.download_request(request_type='check_quota')
 ```
 
 ## Appendix
+### Warnings
+- THS API access token will be updated at 11:50 every day. Avoid data requests at the time, or you may experience some errors
+- Quota will be reset at 00:00 Monday. Avoid data requests at the time, or you may have incorrect quota usage
+- THS API and the downloader server may be unstable sometimes. Do consider adding error-handling blocks in your code
+- If errors persist, please contact IT members
+
 ### Quota usage
 - Defult user quota is **3,000,000 per week**
-- Quota will be reset at **00:00, Monday**
+- Quota will be reset at **00:00 Monday**
 - The *maximum* data size of a single query is **2,000,000**
 - Quota deduction<sup>*</sup> is listed as follows:
     + `'min_between'`<sup>#</sup>: stocks * columns * (total minutes / frequency)
