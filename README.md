@@ -115,7 +115,7 @@ or
     + `'min_between'`
     + `'real_time'`
     + `'day_between'`
-- supported queries are listed as below:
+- supported queries are listed as below<sup>*</sup>:
     * for stock (A-share):
         + `'open'`: 开盘价
         + `'high'`: 最高价
@@ -211,6 +211,7 @@ or
         + `'turnoverRatio'`: 换手率
         + `'sellVolume'`: 内盘
         + `'buyVolume'`: 外盘
+    * <sup>*</sup> The API also supports some other special queries. Please contact IT members if you cannot find the query you need above
 
 ## Examples
 ```python
