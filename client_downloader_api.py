@@ -55,7 +55,7 @@ class Client_Downloader:
         if returned_data_str:
             # print(returned_file_str)
             if request_type == 'trade_day':
-                returned_data = bool(returned_data_str)
+                returned_data = True if returned_data_str == 'True' else False
             elif request_type == 'trade_day_between':
                 returned_data = returned_data_str.split("|")
             elif request_type == 'latest_price':
@@ -69,8 +69,8 @@ class Client_Downloader:
         return returned_data, quota
 
 if __name__ == '__main__':
-    downloader = Client_Downloader('test_user', '123456')
-    rd, quota = downloader.download_request(request_type='check_quota')
+    downloader = Client_Downloader('zhang_wenkai', 'check_mysql_availability')
+    rd, quota = downloader.download_request(request_type='trade_day', start_time="2022-10-01 00:00")
     print(rd)
     print(quota)
     # rd.to_csv("/home/wzhang/workspace/test3.csv")
