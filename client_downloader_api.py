@@ -69,7 +69,7 @@ class Client_Downloader:
         return returned_data, quota
 
 if __name__ == '__main__':
-    downloader = Client_Downloader('zhang_wenkai', 'check_mysql_availability')
+    downloader = Client_Downloader('test_user', '123456')
     rd, quota = downloader.download_request(request_type='trade_day', start_time="2022-10-01 00:00")
     print(rd)
     print(quota)
